@@ -36,7 +36,8 @@
     "hyperf/model-cache": "~1.0.0",
     "hyperf/websocket-server": "^1.0",
     "ext-json": "*",
-    "ext-redis": "*"
+    "ext-redis": "*",
+    "fzaninotto/faker": "^1.8"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
