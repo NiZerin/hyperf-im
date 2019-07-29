@@ -4,9 +4,8 @@
 namespace App\Http\Ws;
 
 
-use App\Controller\BaseController;
 
-class UserController extends BaseController
+class UserController extends ImBase
 {
     const ONLINE_USER = 'IM_ONLINE_USER';
 

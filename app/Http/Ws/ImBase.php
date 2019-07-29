@@ -4,7 +4,10 @@
 namespace App\Http\Ws;
 
 
-class ImBase
+use App\Controller\BaseController;
+use App\Model\{LiveImInfo, LiveImRoom};
+
+class ImBase extends BaseController
 {
     const BUSINESS_SUCCESS_CODE = 200;
     const BUSINESS_CLIENT_BAD_VERSION_CODE = 201; // 客户端版本不对，需升级sdk
@@ -34,6 +37,80 @@ class ImBase
     const BUSINESS_UNPACK_ERROR_CODE = 998; // 解包错误
     const BUSINESS_PACK_ERROR_CODE = 999; // 打包错误
 
+    protected $serve;
+    protected $frame;
+
+
+    /**
+     * @param  string  $imId
+     * @return bool
+     */
+    protected function checkIm(string $imId)
+    {
+        $imInfo = LiveImInfo::query()->where('im_id', $imId)->first();
+        if (is_null($imInfo)) {
+            $errorData = ImBase::json('im user nonexistent , pls check again', ImBase::BUSINESS_NOT_EXIST_CODE);
+            $this->serve->push($this->frame->fd, $errorData);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * check im token
+     * @param  string  $imId
+     * @param  string  $token
+     * @return bool
+     */
+    protected function checkToKen(string $imId, string $token): bool
+    {
+        $imToken = LiveImInfo::query()->where('im_id', $imId)->first();
+        if ($imToken->im_token != $token) {
+            $errorData = ImBase::json('Invalid msg data , bcz check token failed', ImBase::BUSINESS_ARG_NOT_CORRECT_CODE);
+            $this->serve->push($this->frame->fd, $errorData);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * @param  int  $roomId
+     * @return bool
+     */
+    protected function checkRoom(int $roomId)
+    {
+        $roomInfo = LiveImRoom::query()->where('room_id', $roomId)->first();
+        if (is_null($roomInfo)) {
+            $errorData = ImBase::json('room nonexistent , pls check again', ImBase::BUSINESS_NOT_EXIST_CODE);
+            $this->serve->push($this->frame->fd, $errorData);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * verify im id and token , room id
+     * @param  object  $msgData
+     * @return bool
+     */
+    protected function verifyData(object $msgData) :bool
+    {
+        if (!$this->checkRoom($msgData->room_id)) {
+            return false;
+        }
+        if (!$this->checkIm($msgData->im_id)) {
+            return false;
+        }
+        if (!$this->checkToKen($msgData->im_id, $msgData->im_token)){
+            return false;
+        }
+        return true;
+    }
+
+
 
     public static function error(string $msg, int $status_code) :string
     {
@@ -55,7 +132,7 @@ class ImBase
         return json_encode($succeedData,256);
     }
 
-    public static function json(string $msg, int $status_code, array $data = null) :string
+    public static function json(string $msg, int $status_code, $data = null) :string
     {
         $succeedData = [
             'msg' => $msg,
