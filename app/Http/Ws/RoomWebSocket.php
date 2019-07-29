@@ -25,7 +25,7 @@ class RoomWebSocket implements OnMessageInterface, OnOpenInterface, OnCloseInter
     {
         $data = json_decode($frame->data, true);
         if (is_array($data)) {
-            $this->room->CheckData($frame, $server);
+            $this->room->checkData($frame, $server);
             # $server->push($frame->fd, $frame->data);
         } else {
             $errorData = ImBase::json('Invalid connection',ImBase::BUSINESS_NOT_EXIST_CODE);

@@ -14,7 +14,7 @@ class RoomController extends ImBase
     const USER_BIND_FD = 'USER_BIND_FD';
 
 
-    public function CheckData($frame, $serve)
+    public function checkData($frame, $serve)
     {
         $this->serve = $serve;
         $this->frame = $frame;
@@ -26,11 +26,11 @@ class RoomController extends ImBase
             return false;
         }
 
-        $msgType = $msgData->msg_type;
-        if ($msgType === self::JOIN_ROOM){
+        $optType = $msgData->opt_type;
+        if ($optType === self::JOIN_ROOM){
             return $this->joinRoom($msgData);
         }
-        if ($msgType === self::SEND_MSG){
+        if ($optType === self::SEND_MSG){
             return $this->sendMsg($msgData);
         }
 
@@ -45,8 +45,7 @@ class RoomController extends ImBase
      */
     protected function sendMsg(object $msgData) :void
     {
-        $msg = MessageController::getInstance();
-        $msgData = $msg->formatMsgData($msgData);
+        $msgData = MessageController::getInstance($this->serve)->formatMsgData($msgData);
         $roomUser = $this->cache->hVals(self::ROOM_ONLINE.$msgData->room_id);
         foreach ($roomUser as $k => $v) {
             $this->serve->push($v, json_encode($msgData, 256));
