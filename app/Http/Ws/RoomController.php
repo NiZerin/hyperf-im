@@ -5,6 +5,7 @@ namespace App\Http\Ws;
 
 
 use App\Controller\BaseController;
+use App\Model\LiveImRoom;
 
 class RoomController extends BaseController
 {
@@ -28,37 +29,62 @@ class RoomController extends BaseController
         $msgData = json_decode($frame->data, true);
         if (is_array($msgData)) {
             if (key_exists(self::LOGIN_ROOM, $msgData)) {
-                return $this->joinRoom($msgData);
+                if (!$this->checkRoom($msgData[self::LOGIN_ROOM])){
+                    return false;
+                }
+                $this->joinRoom($msgData);
+                return true;
             }
             if (key_exists(self::SEND_MSG, $msgData)) {
                 return $this->sendMsg($msgData);
             }
-            $errorData = ImBase::json('Invalid msg data',ImBase::BUSINESS_NOT_EXIST_CODE);
+            $errorData = ImBase::json('Invalid msg data', ImBase::BUSINESS_NOT_EXIST_CODE);
             $this->serve->push($this->frame->fd, $errorData);
+            return false;
         }
         return false;
     }
 
-
-    protected function sendMsg(array $msgData)
+    /**
+     * @param  array  $msgData
+     * @return bool
+     */
+    protected function sendMsg(array $msgData) :bool
     {
-        $roomUser = $this->cache->hKeys(self::ROOM_ONLINE.$msgData[self::SEND_MSG]);
-        foreach ($roomUser as $k => $v){
-            $this->serve->push($v,$msgData['content']);
+        $checkToken = $this->checkToKen($msgData['im_id'], $msgData['token']);
+        if (!$checkToken){
+            return false;
+        } else {
+            $roomUser = $this->cache->hVals(self::ROOM_ONLINE.$msgData[self::SEND_MSG]);
+            foreach ($roomUser as $k => $v){
+                $this->serve->push($v,$msgData['content']);
+            }
+            return true;
         }
     }
 
-    public function outRoom(int $fd)
+    /**
+     * @param  int  $fd
+     */
+    public function outRoom(int $fd) :void
     {
         $fd = (string)$fd;
-        $imId = $this->cache->hGet(self::USER_BIND_FD,$fd);
-        $roomId = $this->cache->hGet(self::USER_ON_ROOM, $imId);
-        $this->cache->hDel(self::ROOM_ONLINE.$roomId, $imId);
-        $this->cache->hDel(self::USER_ON_ROOM, $imId);
-        $this->cache->hDel(self::USER_BIND_FD, $fd);
+        $imId = (string)$this->cache->hGet(self::USER_BIND_FD, $fd);
+        /*
+         * get im user , if im user exist , keep running
+         */
+        if(!is_bool($imId)){
+            $roomId = $this->cache->hGet(self::USER_ON_ROOM, $imId);
+            $this->cache->hDel(self::ROOM_ONLINE.$roomId, $imId);
+            $this->cache->hDel(self::USER_ON_ROOM, $imId);
+            $this->cache->hDel(self::USER_BIND_FD, $fd);
+        }
     }
 
-    protected function joinRoom(array $joinInfo)
+    /**
+     * @param  array  $joinInfo
+     */
+    protected function joinRoom(array $joinInfo) :void
     {
         /*
          * take im user in room cache
@@ -78,19 +104,48 @@ class RoomController extends BaseController
         $this->createToken($joinInfo);
     }
 
-
     /**
-     * @param  array  $joinInfo
+     * check im token
+     * @param  string  $imId
+     * @param  string  $token
      * @return bool
      */
-    protected function createToken(array $joinInfo)
+    protected function checkToKen(string $imId, string $token) :bool
+    {
+        $imToken = $this->cache->hGet(self::USER_TOKEN, $imId);
+        if ($imToken != $token){
+            $errorData = ImBase::json('Invalid msg data , bcz check token failed', ImBase::BUSINESS_ARG_NOT_CORRECT_CODE);
+            $this->serve->push($this->frame->fd, $errorData);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    protected function checkRoom(int $roomId)
+    {
+        $roomInfo = LiveImRoom::query()->where('room_id', $roomId)->first();
+        if (is_null($roomInfo)){
+            $errorData = ImBase::json('room nonexistent , pls check again', ImBase::BUSINESS_NOT_EXIST_CODE);
+            $this->serve->push($this->frame->fd, $errorData);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * create im token
+     * @param  array  $joinInfo
+     * @return void
+     */
+    protected function createToken(array $joinInfo) :void
     {
         $secret = md5($joinInfo['im_id'].$joinInfo['time'].$joinInfo[self::LOGIN_ROOM].self::AppKey);
 
         if ($secret != $joinInfo['secret']) {
             $errorData = ImBase::json('Invalid connection , bcz check secret failed', ImBase::BUSINESS_SERVICE_NOT_AVAILABLE_CODE);
             $this->serve->push($this->frame->fd, $errorData);
-            return false;
         }
 
         if ($secret == $secret){
@@ -102,9 +157,6 @@ class RoomController extends BaseController
             ];
             $successDate = ImBase::json('Successful connection',ImBase::BUSINESS_SUCCESS_CODE, $loginData);
             $this->serve->push($this->frame->fd, $successDate);
-            return true;
         }
-
-        return false;
     }
 }

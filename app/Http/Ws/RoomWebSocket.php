@@ -28,7 +28,7 @@ class RoomWebSocket implements OnMessageInterface, OnOpenInterface, OnCloseInter
             $this->room->CheckData($frame, $server);
             # $server->push($frame->fd, $frame->data);
         } else {
-            $errorData = ImBase::json('Illegal connection',ImBase::BUSINESS_NOT_EXIST_CODE);
+            $errorData = ImBase::json('Invalid connection',ImBase::BUSINESS_NOT_EXIST_CODE);
             $server->push($frame->fd, $errorData);
         }
     }

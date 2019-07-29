@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 class BaseController extends Controller
 {
 
-    protected $tokenType;
+    protected $AppKey;
 
     public function __construct(ContainerInterface $container)
     {
