@@ -95,8 +95,8 @@ class RoomController extends ImBase
         /*
          * join successful
          */
-        $successDate = ImBase::json('Successful connection', ImBase::BUSINESS_SUCCESS_CODE, $joinInfo);
-        $this->serve->push($this->frame->fd, $successDate);
+        $successData = ImBase::json('Successful connection', ImBase::BUSINESS_SUCCESS_CODE, $joinInfo);
+        $this->serve->push($this->frame->fd, $successData);
     }
 
 
