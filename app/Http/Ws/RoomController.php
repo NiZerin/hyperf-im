@@ -48,6 +48,10 @@ class RoomController extends ImBase
         $msgData = MessageController::getInstance($this->serve)->formatMsgData($msgData);
         $roomUser = $this->cache->hVals(self::ROOM_ONLINE.$msgData->room_id);
         foreach ($roomUser as $k => $v) {
+            if (!$this->serve->isEstablished($v)) {
+                // 如果连接不可用则忽略
+                continue;
+            }
             $this->serve->push($v, json_encode($msgData, 256));
         }
     }

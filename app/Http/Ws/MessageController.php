@@ -16,7 +16,7 @@ class MessageController
     //私有化构造方法、
     private function __construct($serve){
         $this->serve = $serve;
-        echo "单例模式的实例被构造了";
+        echo "单例模式的实例被构造了\n";
     }
     //私有化克隆方法
     private function __clone(){
@@ -36,7 +36,7 @@ class MessageController
         $msgData->msg_id = Uuid::uuid();
         $msgData->time = time();
         $msgData->opt_type = 'new_msg';
-
+        ChatLogController::getInstance()->saveChatLog($msgData);
 //        $method = 'check'.ucfirst($msgData->content->msg_type);
 //        $this->$method($msgData);
 

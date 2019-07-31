@@ -37,7 +37,8 @@
     "hyperf/websocket-server": "^1.0",
     "ext-json": "*",
     "ext-redis": "*",
-    "fzaninotto/faker": "^1.8"
+    "fzaninotto/faker": "^1.8",
+    "hyperf/task": "^1.0"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
