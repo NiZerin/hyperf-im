@@ -76,7 +76,7 @@ class RoomController extends ImBase
 
     /**
      * @param  object  $joinInfo
-     * @return array
+     * @return void
      */
     protected function joinRoom(object $joinInfo): void
     {

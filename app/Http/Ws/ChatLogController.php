@@ -4,8 +4,6 @@
 namespace App\Http\Ws;
 
 
-use App\Model\LiveImChat;
-use Hyperf\Utils\Coroutine;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Task\TaskExecutor;
 use Hyperf\Task\Task;
@@ -37,18 +35,25 @@ class ChatLogController
         return self::$_instance;
     }
 
+    /**
+     * @param $msgData
+     */
+    public static function handle($msgData)
+    {
+        go(function () use ($msgData) {
+
+        });
+    }
+
+    /**
+     * @param $msgData
+     */
     public function saveChatLog($msgData)
     {
         $container = ApplicationContext::getContainer();
         $exec = $container->get(TaskExecutor::class);
-        $result = $exec->execute(new Task([ChatLogController::class, 'handle'], [Coroutine::id(), $msgData]));
+        $result = $exec->execute(new Task([ChatLogController::class, 'handle'], [$msgData]));
         unset($result);
     }
 
-    public static function handle($cid, $msgData)
-    {
-        go(function () use ($msgData) {
-            
-        });
-    }
 }
