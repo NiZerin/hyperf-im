@@ -12,9 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Hyperf\Server\ServerFactory;
+
 class IndexController extends Controller
 {
-    public function index()
+    public function index(ServerFactory $factory)
     {
         $user = $this->request->input('user', 'Hyperf');
         $method = $this->request->getMethod();

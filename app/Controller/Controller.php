@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Redis;
+use Psr\Container\ContainerInterface;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
-use Psr\Container\ContainerInterface;
-use Redis;
 
 abstract class Controller
 {
@@ -34,6 +34,9 @@ abstract class Controller
      */
     protected $response;
 
+    /**
+     * @var mixed|Redis
+     */
     protected $cache;
 
     public function __construct(ContainerInterface $container)

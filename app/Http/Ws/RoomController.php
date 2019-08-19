@@ -4,6 +4,7 @@
 namespace App\Http\Ws;
 
 
+use Hyperf\HttpMessage\Server\Response;
 
 class RoomController extends ImBase
 {
@@ -22,15 +23,15 @@ class RoomController extends ImBase
         var_dump($frame->data);
 
         $msgData = json_decode($frame->data);
-        if (!$this->verifyData($msgData)){
+        if (!$this->verifyData($msgData)) {
             return false;
         }
 
         $optType = $msgData->opt_type;
-        if ($optType === self::JOIN_ROOM){
+        if ($optType === self::JOIN_ROOM) {
             return $this->joinRoom($msgData);
         }
-        if ($optType === self::SEND_MSG){
+        if ($optType === self::SEND_MSG) {
             return $this->sendMsg($msgData);
         }
 
@@ -41,9 +42,9 @@ class RoomController extends ImBase
 
     /**
      * @param  object  $msgData
-     * @return array
+     * @return void|Response
      */
-    protected function sendMsg(object $msgData) :void
+    protected function sendMsg(object $msgData): void
     {
         $msgData = MessageController::getInstance($this->serve)->formatMsgData($msgData);
         $roomUser = $this->cache->hVals(self::ROOM_ONLINE.$msgData->room_id);
@@ -62,10 +63,10 @@ class RoomController extends ImBase
     public function outRoom(int $fd): void
     {
         $fd = (string)$fd;
-        $imId = (string)$this->cache->hGet(self::USER_BIND_FD, $fd);
         /*
          * get im user , if im user exist , keep running
          */
+        $imId = (string)$this->cache->hGet(self::USER_BIND_FD, $fd);
         if (!is_bool($imId)) {
             $roomId = $this->cache->hGet(self::USER_ON_ROOM, $imId);
             $this->cache->hDel(self::ROOM_ONLINE.$roomId, $imId);
@@ -76,7 +77,7 @@ class RoomController extends ImBase
 
     /**
      * @param  object  $joinInfo
-     * @return void
+     * @return void|Response
      */
     protected function joinRoom(object $joinInfo): void
     {

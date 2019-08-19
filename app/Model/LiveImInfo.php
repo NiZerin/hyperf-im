@@ -28,8 +28,6 @@ class LiveImInfo extends Model
         'deleted_at'
     ];
 
-    protected $datas = ['deleted_at'];
-
 
     // im_id
     public function setImIdAttribute($value)
@@ -148,26 +146,6 @@ class LiveImInfo extends Model
             $this->attributes['im_gender'] = '';
         } else {
             $this->attributes['im_gender'] = $value;
-        }
-    }
-
-    // created_by
-    public function setCreatedByAttribute($value)
-    {
-        if (is_numeric($value)) {
-            $this->attributes['created_by'] = $_SERVER['UID'] ?? 0;
-        } else {
-            $this->attributes['created_by'] = $_SERVER['UID'] ?? 0;
-        }
-    }
-
-    // updated_by
-    public function setUpdatedByAttribute($value)
-    {
-        if (is_numeric($value)) {
-            $this->attributes['updated_by'] = $_SERVER['UID'] ?? 0;
-        } else {
-            $this->attributes['updated_by'] = $_SERVER['UID'] ?? 0;
         }
     }
 

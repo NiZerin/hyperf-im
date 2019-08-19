@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace App\Http\Ws;
 
-use Hyperf\Contract\{OnCloseInterface, OnMessageInterface, OnOpenInterface};
-use Psr\Container\ContainerInterface;
-use Swoole\Http\Request;
 use Swoole\Server;
+use Swoole\Http\Request;
 use Swoole\Websocket\Frame;
+use Psr\Container\ContainerInterface;
+use Hyperf\Contract\{OnCloseInterface, OnMessageInterface, OnOpenInterface};
 
 class RoomWebSocket implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {

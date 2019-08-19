@@ -3,18 +3,28 @@
 namespace App\Model;
 
 
-
 class LiveImChat extends Model
 {
 
     public $table = 'live_im_chats';
 
     protected $fillable = [
-        'id', 'im_id', 'to_im_id', 'to_type', 'from_type', 'from_im_id', 'msg_content', 'msg_id', 'msg_type', 'msg_time', 'created_by', 'updated_by', 'created_at', 'updated_at', 'deleted_at'
+        'id',
+        'im_id',
+        'to_im_id',
+        'to_type',
+        'from_type',
+        'from_im_id',
+        'msg_content',
+        'msg_id',
+        'msg_type',
+        'msg_time',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
-
-    protected $datas = ['deleted_at'];
-
 
     // im_id
 
@@ -94,26 +104,6 @@ class LiveImChat extends Model
             $this->attributes['msg_time'] = '';
         } else {
             $this->attributes['msg_time'] = $value;
-        }
-    }
-
-    // created_by
-    public function setCreatedByAttribute($value)
-    {
-        if (is_numeric($value)) {
-            $this->attributes['created_by'] = $_SERVER['UID'] ?? 0;
-        } else {
-            $this->attributes['created_by'] = $_SERVER['UID'] ?? 0;
-        }
-    }
-
-    // updated_by
-    public function setUpdatedByAttribute($value)
-    {
-        if (is_numeric($value)) {
-            $this->attributes['updated_by'] = $_SERVER['UID'] ?? 0;
-        } else {
-            $this->attributes['updated_by'] = $_SERVER['UID'] ?? 0;
         }
     }
 

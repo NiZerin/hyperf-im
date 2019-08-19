@@ -4,9 +4,9 @@
 namespace App\Http\Ws;
 
 
-use Hyperf\Utils\ApplicationContext;
-use Hyperf\Task\TaskExecutor;
 use Hyperf\Task\Task;
+use Hyperf\Task\TaskExecutor;
+use Hyperf\Utils\ApplicationContext;
 
 class ChatLogController
 {
@@ -30,7 +30,7 @@ class ChatLogController
     public static function getInstance()
     {
         if (!(self::$_instance instanceof ChatLogController)) {
-            self::$_instance = new ChatLogController();
+            self::$_instance = new self();
         }
         return self::$_instance;
     }
@@ -56,4 +56,15 @@ class ChatLogController
         unset($result);
     }
 
+    public function __call($name, $arguments)
+    {
+        return $this->$name(...$arguments);
+        // TODO: Implement __call() method.
+    }
+
+    public static function __callStatic($name, $arguments)
+    {
+        return static::$name(...$arguments);
+        // TODO: Implement __callStatic() method.
+    }
 }
