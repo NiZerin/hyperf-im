@@ -4,13 +4,14 @@
 namespace App\Websocket\User;
 
 
-use Swoole\Server;
-use Swoole\Http\Request;
-use Swoole\Websocket\Frame;
-use Hyperf\Contract\OnOpenInterface;
-use Psr\Container\ContainerInterface;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
+use Hyperf\Contract\OnOpenInterface;
+use Psr\Container\ContainerInterface;
+use Swoole\Http\Request;
+use Swoole\Server;
+use Swoole\Websocket\Frame;
+use Swoole\WebSocket\Server as WebSocketServer;
 
 
 class WebsocketController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
@@ -24,12 +25,12 @@ class WebsocketController implements OnMessageInterface, OnOpenInterface, OnClos
         // TODO: Implement onClose() method.
     }
 
-    public function onMessage(Server $server, Frame $frame): void
+    public function onMessage(WebSocketServer $server, Frame $frame): void
     {
         // TODO: Implement onMessage() method.
     }
 
-    public function onOpen(Server $server, Request $request): void
+    public function onOpen(WebSocketServer $server, Request $request): void
     {
         // TODO: Implement onOpen() method.
     }

@@ -14,6 +14,7 @@ use Hyperf\Contract\OnOpenInterface;
 use Psr\Container\ContainerInterface;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
+use Swoole\WebSocket\Server as WebSocketServer;
 
 
 class WebsocketController implements OnMessageInterface, OnOpenInterface, OnCloseInterface
@@ -29,21 +30,21 @@ class WebsocketController implements OnMessageInterface, OnOpenInterface, OnClos
         var_dump('closed'.$fd);
     }
 
-    public function onMessage(Server $server, Frame $frame): void
+    public function onMessage(WebSocketServer $server, Frame $frame): void
     {
         Websocket::setFrame($frame);
         $data = json_decode($frame->data);
         if (is_object($data)) {
             RoomController::me()->checkData($data);
         } else {
-            $errorData = ImTools::json('Invalid connection',ImBase::BUSINESS_NOT_EXIST_CODE);
+            $errorData = ImTools::json('Invalid connection', ImBase::BUSINESS_NOT_EXIST_CODE);
             $server->push($frame->fd, $errorData);
         }
     }
 
-    public function onOpen(Server $server, Request $request): void
+    public function onOpen(WebSocketServer $server, Request $request): void
     {
-        $openData = ImTools::json('Opened '.$request->fd.', pls check secret',ImBase::BUSINESS_SUCCESS_CODE);
+        $openData = ImTools::json('Opened '.$request->fd.', pls check secret', ImBase::BUSINESS_SUCCESS_CODE);
         $server->push($request->fd, $openData);
     }
 }
