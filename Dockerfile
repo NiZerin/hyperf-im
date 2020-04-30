@@ -5,7 +5,7 @@
 # @contact  group@hyperf.io
 # @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
 
-FROM hyperf/hyperf:7.2-alpine-cli
+FROM hyperf/hyperf:7.2-alpine-v3.9-cli
 LABEL maintainer="Hyperf Developers <group@hyperf.io>" version="1.0" license="MIT"
 
 ##
@@ -45,13 +45,14 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man \
     && echo -e "\033[42;37m Build Completed :).\033[0m\n"
 
-COPY . /opt/www
-
 WORKDIR /opt/www
 
-RUN composer install --no-dev \
-    && composer dump-autoload -o \
-    && php /opt/www/bin/hyperf.php di:init-proxy
+# Composer Cache
+# COPY ./composer.* /opt/www/
+# RUN composer install --no-dev --no-scripts
+
+COPY . /opt/www
+RUN composer install --no-dev -o
 
 EXPOSE 9501
 
