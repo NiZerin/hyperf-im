@@ -22,7 +22,7 @@ use Swoole\Server;
 use Swoole\Websocket\Frame;
 use Swoole\WebSocket\Server as WebSocketServer;
 
-class Controller implements OnMessageInterface, OnOpenInterface, OnCloseInterface
+class Service implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
     public function onMessage(WebSocketServer $server, Frame $frame): void
     {
@@ -36,6 +36,6 @@ class Controller implements OnMessageInterface, OnOpenInterface, OnCloseInterfac
     
     public function onOpen(WebSocketServer $server, Request $request): void
     {
-        $server->push($request->fd, 'Opened: '. $request->fd);
+        $server->push($request->fd, 'Opened: '.print_r($request->get));
     }
 }
