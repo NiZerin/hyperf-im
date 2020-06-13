@@ -14,14 +14,27 @@ declare(strict_types=1);
 
 namespace Src\WebSocket;
 
-
+/**
+ * Class Auth
+ *
+ * @package Src\WebSocket
+ */
 class Auth
 {
+
+    /**
+     * @param  array  $auth
+     */
     public static function checkAuth(array $auth)
     {
 
     }
 
+    /**
+     * @param  array  $auth
+     *
+     * @return false
+     */
     public static function doLogin(array $auth)
     {
         if (!array_key_exists('_token', $auth)) {
@@ -29,6 +42,9 @@ class Auth
         }
     }
 
+    /**
+     *
+     */
     public static function checkToken()
     {
 
