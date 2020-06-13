@@ -16,6 +16,9 @@ namespace Src\Home\api;
 
 
 use App\Controller\AbstractController;
+use App\Model\UserModel;
+use Src\Home\validated\UserLogin;
+use Src\Home\validated\UserReg;
 
 /**
  * 用户模块
@@ -26,4 +29,39 @@ use App\Controller\AbstractController;
 class User extends AbstractController
 {
 
+    /**
+     * 注册
+     *
+     * @param  \Src\Home\validated\UserReg  $userReg
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function reg(UserReg $userReg)
+    {
+        $data = $userReg->validated();
+        $data['pwd'] = sha1($data['pwd']);
+
+        try {
+            UserModel::query()->create($data);
+            return $this->response->json(data('注册成功'));
+        } catch (\Exception $exception) {
+            return $this->response->json(data($exception->getMessage()));
+        }
+    }
+
+    /**
+     * 登录
+     *
+     * @param  \Src\Home\validated\UserLogin  $userLogin
+     */
+    public function login(UserLogin $userLogin)
+    {
+        $data = $userLogin->validated();
+
+        $userInfo = UserModel::query()->where('phone', $data['phone'])->first();
+
+        if (sha1($data['pwd']) != $userInfo->pwd) {
+            $this->response->json(data('密码错误'));
+        }
+    }
 }

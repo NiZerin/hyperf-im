@@ -19,19 +19,4 @@ use App\Controller\AbstractController;
 class Auth extends AbstractController
 {
 
-    /**
-     * 注册
-     */
-    public function reg()
-    {
-
-    }
-
-    /**
-     * 登录
-     */
-    public function login()
-    {
-
-    }
 }

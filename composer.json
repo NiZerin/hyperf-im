@@ -31,7 +31,8 @@
     "hyperf/websocket-server": "^1.1",
     "ext-json": "*",
     "ext-redis": "*",
-    "firebase/php-jwt": "^5.2"
+    "firebase/php-jwt": "^5.2",
+    "hyperf/validation": "^1.1"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
@@ -55,7 +56,9 @@
       "App\\": "app/",
       "Src\\": "src/"
     },
-    "files": []
+    "files": [
+      "file/helper.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

@@ -9,3 +9,12 @@
  * Time: 2:46 PM
  * FileName: api.php
  */
+
+use Hyperf\HttpServer\Router\Router;
+
+Router ::addGroup('/api', function () {
+    Router::addGroup('/user', function () {
+       Router::post('/reg', 'Src\Home\api\User@reg');
+       Router::post('/login', 'Src\Home\api\User@login');
+    });
+});

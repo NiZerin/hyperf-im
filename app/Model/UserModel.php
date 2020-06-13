@@ -21,6 +21,8 @@ namespace App\Model;
  */
 class UserModel extends Model
 {
+
     protected $table = 'app_users';
-    protected $fillable = [];
+    protected $fillable = ['id', 'name', 'pwd', 'code', 'sex', 'addr', 'intro', 'phone', 'cover',];
+
 }

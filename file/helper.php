@@ -43,15 +43,9 @@ if (!function_exists('success')) {
      *
      * @return string
      */
-    function success(string $msg, int $success_code, array $data = null): string
+    function success(string $msg, int $success_code = 0, array $data = null): string
     {
-        $succeedData = [
-            'msg' => $msg,
-            'success_code' => $success_code,
-            'data' => $data
-        ];
-
-        return json_encode($succeedData,256);
+        return json($msg, $success_code, $data);
     }
 }
 
@@ -60,15 +54,13 @@ if (!function_exists('error')) {
      * @param  string  $msg
      * @param  int  $error_code
      *
+     * @param  array|null  $data
+     *
      * @return false|string
      */
-    function error(string $msg, int $error_code): string
+    function error(string $msg, int $error_code = 1, array $data = null): string
     {
-        $errorData = [
-            'msg' => $msg,
-            'error_code' => $error_code,
-        ];
-        return json_encode($errorData, 256);
+        return json($msg, $error_code, $data);
     }
 }
 
@@ -80,7 +72,7 @@ if (!function_exists('json')) {
      *
      * @return string
      */
-    function json(string $msg, int $code, array $data = null): string
+    function json(string $msg, int $code = 0, array $data = null): string
     {
         $succeedData = [
             'msg' => $msg,
@@ -89,5 +81,23 @@ if (!function_exists('json')) {
         ];
 
         return json_encode($succeedData,256);
+    }
+}
+
+if (!function_exists('data')) {
+    /**
+     * @param  string  $msg
+     * @param  int  $code
+     * @param  array|null  $data
+     *
+     * @return array
+     */
+    function data(string $msg, int $code = 0, array $data = null)
+    {
+        return [
+            'msg' => $msg,
+            'code' => $code,
+            'data' => $data
+        ];
     }
 }
