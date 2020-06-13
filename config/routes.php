@@ -10,11 +10,9 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
  */
 
-use Hyperf\HttpServer\Router\Router;
+require_once BASE_PATH . '/route/api.php';
+require_once BASE_PATH . '/route/server.php';
+require_once BASE_PATH . '/route/web.php';
 
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
-Router::addServer('ws', function () {
-    Router::get('/', 'Src\WebSocket\Service');
-});
 
