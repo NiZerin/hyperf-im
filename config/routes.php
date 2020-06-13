@@ -17,3 +17,4 @@ Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@i
 Router::addServer('ws', function () {
     Router::get('/', 'Src\WebSocket\Service');
 });
+

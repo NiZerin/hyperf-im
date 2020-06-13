@@ -29,7 +29,9 @@
     "hyperf/async-queue": "~1.1.0",
     "hyperf/model-cache": "~1.1.0",
     "hyperf/websocket-server": "^1.1",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-redis": "*",
+    "firebase/php-jwt": "^5.2"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",
