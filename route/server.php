@@ -13,5 +13,5 @@
 use Hyperf\HttpServer\Router\Router;
 
 Router::addServer('ws', function () {
-    Router::get('/', 'Src\WebSocket\Service');
+    Router::get('/', 'Src\WebSocket\Server');
 });

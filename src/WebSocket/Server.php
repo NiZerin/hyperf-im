@@ -18,7 +18,7 @@ use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
 use Swoole\Http\Request;
-use Swoole\Server;
+use Swoole\Server as SwooleServer;
 use Swoole\Websocket\Frame;
 use Swoole\WebSocket\Server as WebSocketServer;
 
@@ -27,7 +27,7 @@ use Swoole\WebSocket\Server as WebSocketServer;
  *
  * @package Src\WebSocket
  */
-class Service implements OnMessageInterface, OnOpenInterface, OnCloseInterface
+class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
 {
     /**
      * @param  \Swoole\WebSocket\Server  $server
@@ -35,7 +35,7 @@ class Service implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      */
     public function onMessage(WebSocketServer $server, Frame $frame): void
     {
-        $server->push($frame->fd, 'Recv: ' . $frame->data);
+        Message::switch($frame, $server);
     }
 
     /**
@@ -43,9 +43,9 @@ class Service implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      * @param  int  $fd
      * @param  int  $reactorId
      */
-    public function onClose(Server $server, int $fd, int $reactorId): void
+    public function onClose(SwooleServer $server, int $fd, int $reactorId): void
     {
-        var_dump('closed');
+        User::setOutline($fd);
     }
 
     /**
@@ -54,6 +54,14 @@ class Service implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      */
     public function onOpen(WebSocketServer $server, Request $request): void
     {
-        $server->push($request->fd, 'Opened: '.print_r($request->get));
+        $check = Auth::checkToken($request->get ?? []);
+
+        if (is_bool($check)) {
+            $server->push($request->fd, error('token check failed'));
+            $server->close($request->fd);
+        } else {
+            User::setOnline($check, $request->fd);
+            $server->push($request->fd, success('login success'));
+        }
     }
 }

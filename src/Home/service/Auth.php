@@ -36,45 +36,46 @@ class Auth
 
         $token = Jwt::encode($data);
 
-        $this->tokenToRides((string)$user->id, $token);
+        $this->tokenToRedis((string)$user->id, $token);
 
         return 'Bearer ' . $token;
     }
 
     /**
      * 检查 token
+     *
      * @param  string  $token
      *
-     * @return bool
+     * @return false|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Builder[]|\Hyperf\Database\Model\Collection|\Hyperf\Database\Model\Model
      */
-    public function checkToken(string $token): bool
+    public function checkToken(string $token)
     {
         [, $token] = explode(' ', $token);
 
         $data = Jwt::decode($token);
 
-        if (time() > $data['exp_time']) {
+        if (time() > $data->exp_time) {
             return false;
         }
 
-        $user = UserModel::query()->find($data->id);
+        $user = UserModel::query()->find($data->user_id);
 
         if (is_null($user)) {
             return false;
+        } else {
+            return $user;
         }
-
-        return true;
     }
 
     /**
      * @param  string  $userId
      * @param  string  $token
      *
-     * @return int
+     * @return void
      */
-    protected function tokenToRides(string $userId, string $token): int
+    public function tokenToRedis(string $userId, string $token): void
     {
-        return redis()->hSet('user_token', $userId, $token);
+        redis()->hSet('user_token', $userId, $token);
     }
 
     /**
@@ -82,7 +83,7 @@ class Auth
      *
      * @return string
      */
-    protected function tokenFromRides(int $userId): string
+    public function tokenFromRedis(int $userId): string
     {
         return redis()->hGet('user_token', $userId);
     }

@@ -21,32 +21,17 @@ namespace Src\WebSocket;
  */
 class Auth
 {
-
     /**
-     * @param  array  $auth
-     */
-    public static function checkAuth(array $auth)
-    {
-
-    }
-
-    /**
-     * @param  array  $auth
+     * @param  array  $token
      *
-     * @return false
+     * @return false|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Builder[]|\Hyperf\Database\Model\Collection|\Hyperf\Database\Model\Model
      */
-    public static function doLogin(array $auth)
+    public static function checkToken(array $token)
     {
-        if (!array_key_exists('_token', $auth)) {
+        if (!array_key_exists('token', $token)) {
             return false;
         }
-    }
 
-    /**
-     *
-     */
-    public static function checkToken()
-    {
-
+        return (new \Src\Home\service\Auth())->checkToken($token['token']);
     }
 }
