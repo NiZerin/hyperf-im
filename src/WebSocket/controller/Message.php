@@ -11,7 +11,7 @@
  */
 
 
-namespace Src\WebSocket;
+namespace Src\WebSocket\controller;
 
 use Swoole\WebSocket\Frame;
 
@@ -42,8 +42,13 @@ class Message
             return;
         }
 
-        if ($message->action == 'send_msg_to_user') {
-            self::chat($frame, $server, $message);
+        switch ($message->action) {
+            case ('send_msg_to_user') : {
+                self::chat($frame, $server, $message);
+            }
+            default : {
+                return;
+            }
         }
     }
 

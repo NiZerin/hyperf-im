@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Src\WebSocket;
 
+use Cassandra\Uuid;
 use Hyperf\Contract\OnCloseInterface;
 use Hyperf\Contract\OnMessageInterface;
 use Hyperf\Contract\OnOpenInterface;
@@ -35,7 +36,7 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      */
     public function onMessage(WebSocketServer $server, Frame $frame): void
     {
-        Message::switch($frame, $server);
+        Enter::onMessage($frame, $server);
     }
 
     /**
@@ -45,7 +46,7 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      */
     public function onClose(SwooleServer $server, int $fd, int $reactorId): void
     {
-        User::setOutline($fd);
+        Enter::onClose($server, $fd);
     }
 
     /**
@@ -54,14 +55,6 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      */
     public function onOpen(WebSocketServer $server, Request $request): void
     {
-        $check = Auth::checkToken($request->get ?? []);
-
-        if (is_bool($check)) {
-            $server->push($request->fd, error('token check failed'));
-            $server->close($request->fd);
-        } else {
-            User::setOnline($check, $request->fd);
-            $server->push($request->fd, success('login success'));
-        }
+        Enter::onOpen($server, $request);
     }
 }

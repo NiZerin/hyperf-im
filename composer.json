@@ -32,7 +32,8 @@
     "ext-json": "*",
     "ext-redis": "*",
     "firebase/php-jwt": "^5.2",
-    "hyperf/validation": "^1.1"
+    "hyperf/validation": "^1.1",
+    "ramsey/uuid": "^4.0"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",

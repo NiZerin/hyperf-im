@@ -11,7 +11,7 @@
  */
 
 
-namespace Src\WebSocket;
+namespace Src\WebSocket\controller;
 
 /**
  * 用户上下线
@@ -35,14 +35,18 @@ class User
     }
 
     /**
+     * @param  \Swoole\Server  $server
      * @param  int  $fd
      */
-    public static function setOutline(int $fd): void
+    public static function setOutline($server, int $fd): void
     {
         $fd = (string)$fd;
 
         $userId = redis()->hGet('im_user_online', $fd);
+
         redis()->hDel('user_id_to_fd', $userId);
         redis()->hDel('im_user_online', $fd);
+
+        $server->close($fd);
     }
 }
