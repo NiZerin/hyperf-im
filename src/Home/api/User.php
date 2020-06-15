@@ -17,6 +17,7 @@ namespace Src\Home\api;
 
 use App\Controller\AbstractController;
 use App\Model\UserModel;
+use Src\Home\service\Auth;
 use Src\Home\validated\UserLogin;
 use Src\Home\validated\UserReg;
 
@@ -39,6 +40,7 @@ class User extends AbstractController
     public function reg(UserReg $userReg)
     {
         $data = $userReg->validated();
+
         $data['pwd'] = sha1($data['pwd']);
 
         try {
@@ -53,8 +55,11 @@ class User extends AbstractController
      * 登录
      *
      * @param  \Src\Home\validated\UserLogin  $userLogin
+     * @param  \Src\Home\service\Auth  $auth
+     *
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function login(UserLogin $userLogin)
+    public function login(UserLogin $userLogin, Auth $auth)
     {
         $data = $userLogin->validated();
 
@@ -63,5 +68,9 @@ class User extends AbstractController
         if (sha1($data['pwd']) != $userInfo->pwd) {
             $this->response->json(data('密码错误'));
         }
+
+        $token = $auth->makeToken($userInfo);
+
+        return $this->response->json(data('login success', 0, ['token' => $token]));
     }
 }
