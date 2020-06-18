@@ -15,9 +15,9 @@ namespace Src\Home\validated;
 
 
 
-use App\Request\FooRequest;
+use App\Request\BaseRequest;
 
-class UserReg extends FooRequest
+class UserReg extends BaseRequest
 {
 
     /**

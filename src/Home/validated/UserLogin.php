@@ -14,15 +14,21 @@
 namespace Src\Home\validated;
 
 
-use App\Request\FooRequest;
+use App\Request\BaseRequest;
 
-class UserLogin extends FooRequest
+class UserLogin extends BaseRequest
 {
+    /**
+     * @return bool
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * @return string[]
+     */
     public function rules(): array
     {
         return [
