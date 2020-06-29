@@ -44,31 +44,11 @@ class Message
 
         switch ($message->action) {
             case ('send_msg_to_user') : {
-                self::chat($frame, $server, $message);
+                Chat::send($frame, $server, $message);
             }
             default : {
                 return;
             }
         }
-    }
-
-    /**
-     * @param  Frame  $frame
-     * @param  \Swoole\WebSocket\Server $server
-     * @param $message
-     */
-    public static function chat($frame, $server, object $message)
-    {
-        $userId = redis()->hGet('im_user_online', (string)$frame->fd);
-        $toUserFd = redis()->hGet('user_id_to_fd', (string)$message->to_user_id);
-
-        $toUserMsg = [
-            'action' => 'msg_from_user',
-            'message' => $message->message,
-            'from_user_id' => $userId
-        ];
-
-        $server->push($toUserFd, success('new msg', 0, $toUserMsg));
-        $server->push($frame->fd, success('msg send seccess'));
     }
 }

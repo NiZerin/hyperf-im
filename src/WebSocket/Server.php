@@ -34,7 +34,7 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      * @param  \Swoole\WebSocket\Server  $server
      * @param  \Swoole\Websocket\Frame  $frame
      */
-    public function onMessage(WebSocketServer $server, Frame $frame): void
+    public function onMessage($server, Frame $frame): void
     {
         Enter::onMessage($frame, $server);
     }
@@ -44,7 +44,7 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      * @param  int  $fd
      * @param  int  $reactorId
      */
-    public function onClose(SwooleServer $server, int $fd, int $reactorId): void
+    public function onClose($server, int $fd, int $reactorId): void
     {
         Enter::onClose($server, $fd);
     }
@@ -53,7 +53,7 @@ class Server implements OnMessageInterface, OnOpenInterface, OnCloseInterface
      * @param  \Swoole\WebSocket\Server  $server
      * @param  \Swoole\Http\Request  $request
      */
-    public function onOpen(WebSocketServer $server, Request $request): void
+    public function onOpen($server, Request $request): void
     {
         Enter::onOpen($server, $request);
     }
