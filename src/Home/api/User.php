@@ -45,7 +45,7 @@ class User extends AbstractController
 
         try {
             UserModel::query()->create($data);
-            return $this->response->json(data('注册成功'));
+            return $this->response->json(data('register success'));
         } catch (\Exception $exception) {
             return $this->response->json(data($exception->getMessage()));
         }
@@ -66,7 +66,7 @@ class User extends AbstractController
         $userInfo = UserModel::query()->where('phone', $data['phone'])->first();
 
         if (sha1($data['pwd']) != $userInfo->pwd) {
-            $this->response->json(data('密码错误'));
+            $this->response->json(data('password error'));
         }
 
         $token = $auth->makeToken($userInfo);

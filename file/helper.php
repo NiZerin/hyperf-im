@@ -101,3 +101,25 @@ if (!function_exists('data')) {
         ];
     }
 }
+
+if(!function_exists('timestamp')) {
+    /**
+     * @return float
+     */
+    function timestamp()
+    {
+        [$msec, $sec] = explode(' ', microtime());
+
+        return (float) sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+    }
+}
+
+if (!function_exists('uuid')) {
+    /**
+     * @return string
+     */
+    function uuid()
+    {
+        return \Ramsey\Uuid\v4();
+    }
+}

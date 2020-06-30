@@ -30,19 +30,19 @@ class Message
      */
     public static function switch($frame, $server)
     {
-        $message = json_decode($frame->data);
+        $message = json_decode($frame->data, true);
 
         if (is_null($message)) {
             $server->push($frame->fd, error('message content error'));
             return;
         }
 
-        if (!property_exists($message, 'action')) {
+        if (!array_key_exists('action', $message)) {
             $server->push($frame->fd, error('message action error'));
             return;
         }
 
-        switch ($message->action) {
+        switch ($message['action']) {
             case ('send_msg_to_user') : {
                 Chat::send($frame, $server, $message);
             }

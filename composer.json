@@ -33,7 +33,8 @@
     "ext-redis": "*",
     "firebase/php-jwt": "^5.2",
     "hyperf/validation": "~2.0.0",
-    "ramsey/uuid": "^4.0"
+    "ramsey/uuid": "^4.0",
+    "aliyuncs/oss-sdk-php": "^2.3"
   },
   "require-dev": {
     "swoft/swoole-ide-helper": "^4.2",

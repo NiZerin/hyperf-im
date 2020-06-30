@@ -44,15 +44,27 @@ class Auth
     /**
      * 检查 token
      *
-     * @param  string  $token
+     * @param  string  $bearerToken
      *
      * @return false|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Builder[]|\Hyperf\Database\Model\Collection|\Hyperf\Database\Model\Model
      */
-    public function checkToken(string $token)
+    public function checkToken(string $bearerToken)
     {
-        [, $token] = explode(' ', $token);
+        if (is_int(strpos($bearerToken, 'Bearer'))) {
+            [, $token] = explode(' ', $bearerToken);
+        } else {
+            return false;
+        }
 
-        $data = Jwt::decode($token);
+        if (is_null($token)) {
+            return false;
+        }
+
+        try {
+            $data = Jwt::decode($token);
+        } catch (\Exception $exception) {
+            return false;
+        }
 
         if (time() > $data->exp_time) {
             return false;

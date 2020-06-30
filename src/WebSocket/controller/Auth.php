@@ -28,6 +28,7 @@ class Auth
      */
     public static function doLogin($server, $request): void
     {
+        /** @var $check \stdClass | bool */
         $check = self::checkToken($request->get ?? []);
 
         if (is_bool($check)) {
@@ -62,16 +63,20 @@ class Auth
 
     /**
      * 校验token
-     * @param  array  $token
+     * @param  array  $data
      *
      * @return false|\Hyperf\Database\Model\Builder|\Hyperf\Database\Model\Builder[]|\Hyperf\Database\Model\Collection|\Hyperf\Database\Model\Model
      */
-    public static function checkToken(array $token)
+    public static function checkToken(array $data)
     {
-        if (!array_key_exists('token', $token)) {
+        if (!array_key_exists('token', $data)) {
             return false;
         }
 
-        return (new \Src\Home\service\Auth())->checkToken($token['token']);
+        if (empty($data['token'])) {
+            return false;
+        }
+
+        return (new \Src\Home\service\Auth())->checkToken($data['token']);
     }
 }

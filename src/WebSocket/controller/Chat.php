@@ -13,6 +13,7 @@
 
 namespace Src\WebSocket\controller;
 
+use App\Model\FriendChatLogModel;
 use Swoole\WebSocket\Frame;
 
 /**
@@ -28,23 +29,47 @@ class Chat
      * @param  \Swoole\WebSocket\Server $server
      * @param $message
      */
-    public static function send($frame, $server, object $message)
+    public static function send($frame, $server, array $message)
     {
         $userId = redis()->hGet('im_user_online', (string)$frame->fd);
-        $toUserFd = redis()->hGet('user_id_to_fd', (string)$message->to_user_id);
+        $targetUserFd = redis()->hGet('user_id_to_fd', (string)$message['target_user_id']);
 
-        $toUserMsg = [
+        $msgData = [
             'action' => 'msg_from_user',
-            'message' => $message->message,
+            'message' => [
+                'msg_time' => timestamp(),
+                'msg_id' => uuid(),
+                'msg_type' => $message['message']['msg_type'],
+                'msg_body' => $message['message']['msg_body'],
+            ],
             'from_user' => [
                 'id' => $userId
             ],
             'target_user' => [
-                'id' => ''
+                'id' => $message['target_user_id']
             ]
         ];
 
-        $server->push($toUserFd, success('new msg', 0, $toUserMsg));
-        $server->push($frame->fd, success('msg send seccess'));
+        $server->push($targetUserFd, json_encode($msgData, 256));
+        $server->push($frame->fd, json_encode($msgData, 256));
+
+        self::save($msgData);
+    }
+
+    /**
+     * @param  array  $msgData
+     */
+    public static function save(array $msgData)
+    {
+        go(function () use ($msgData) {
+            FriendChatLogModel::query()->create([
+                'from_uid' => $msgData['from_user']['id'],
+                'target_uid' => $msgData['target_user']['id'],
+                'msg_id' => $msgData['message']['msg_id'],
+                'msg_time' => $msgData['message']['msg_time'],
+                'msg_type' => $msgData['message']['msg_type'],
+                'msg_body' => json_encode($msgData['message']['msg_body'], 256),
+            ]);
+        });
     }
 }

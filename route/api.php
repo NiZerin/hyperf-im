@@ -17,4 +17,9 @@ Router ::addGroup('/api', function () {
        Router::post('/reg', 'Src\Home\api\User@reg');
        Router::post('/login', 'Src\Home\api\User@login');
     });
+
+    Router::addGroup('/upload', function () {
+        Router::post('/image', 'Src\Home\api\Tools@uploadImg');
+        Router::post('/file', 'Src\Home\api\Tools@uploadFile');
+    });
 });

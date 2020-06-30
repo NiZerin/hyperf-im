@@ -19,7 +19,7 @@ use Hyperf\ModelCache\CacheableInterface;
 
 abstract class Model extends BaseModel implements CacheableInterface
 {
-    use Cacheable,SoftDeletes;
+    use Cacheable, SoftDeletes;
 
     /**
      * 自动写入时间戳
@@ -33,7 +33,7 @@ abstract class Model extends BaseModel implements CacheableInterface
     protected $dateFormat = 'U';
 
     public const CREATED_AT = 'created_at';
-    public const UPDATED_AT = 'update_at';
+    public const UPDATED_AT = 'updated_at';
 
     /**
      * 自增
