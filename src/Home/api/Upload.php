@@ -19,16 +19,17 @@ use App\Tools\Oss;
 use Hyperf\HttpMessage\Upload\UploadedFile;
 
 /**
- * Class Tools
+ * 上传文件
+ * Class Upload
  *
  * @package Src\Home\api
  */
-class Tools extends AbstractController
+class Upload extends AbstractController
 {
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function uploadImg()
+    public function image()
     {
         $file = $this->request->file('image');
 
@@ -42,7 +43,7 @@ class Tools extends AbstractController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function uploadFile()
+    public function file()
     {
         $file = $this->request->file('file');
 
@@ -65,7 +66,7 @@ class Tools extends AbstractController
         $fileSize = $file->getSize();
 
         if ($fileSize / 1024 / 1024 > $size) {
-            return $this->response->json(data('file size too max, only 5 mb'));
+            return $this->response->json(data('file size too max, only'. $size .'mb'));
         }
 
         $content = $file->getStream()->getContents();

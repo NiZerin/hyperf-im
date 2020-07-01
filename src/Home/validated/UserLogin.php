@@ -33,7 +33,7 @@ class UserLogin extends BaseRequest
     {
         return [
             'phone' => 'required|digits:11|exists:app_users,phone',
-            'pwd' => 'required|alpha_dash|min:6|max:16',
+            'pwd'   => 'required|alpha_dash|min:6|max:16',
         ];
     }
 

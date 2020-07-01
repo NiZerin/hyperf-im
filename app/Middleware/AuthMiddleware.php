@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Hyperf\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -43,6 +44,12 @@ class AuthMiddleware implements MiddlewareInterface
         if (is_bool($check)) {
             return $this->response->json(data('token check failed'));
         } else {
+            $request = Context::get(ServerRequestInterface::class);
+
+            $request = $request->withAttribute('user', $check);
+
+            Context::set(ServerRequestInterface::class, $request);
+
             return $handler->handle($request);
         }
     }

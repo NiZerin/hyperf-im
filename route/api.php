@@ -20,8 +20,8 @@ Router::addGroup('/api', function () {
     });
 
     Router::addGroup('/upload', function () {
-        Router::post('/image', 'Src\Home\api\Tools@uploadImg');
-        Router::post('/file', 'Src\Home\api\Tools@uploadFile');
+        Router::post('/image', 'Src\Home\api\Upload@image');
+        Router::post('/file', 'Src\Home\api\Upload@file');
     }, [
         'middleware' => [AuthMiddleware::class]
     ]);

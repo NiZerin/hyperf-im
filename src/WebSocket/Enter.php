@@ -29,7 +29,7 @@ class Enter
      * @param $frame
      * @param $server
      */
-    public static function onMessage($frame, $server): void
+    public static function message($frame, $server): void
     {
         Message::switch($frame, $server);
     }
@@ -38,7 +38,7 @@ class Enter
      * @param $server
      * @param $fd
      */
-    public static function onClose($server, $fd): void
+    public static function close($server, $fd): void
     {
         User::setOutline($server, $fd);
     }
@@ -47,7 +47,7 @@ class Enter
      * @param $server
      * @param $request
      */
-    public static function onOpen($server, $request): void
+    public static function open($server, $request): void
     {
         Auth::doLogin($server, $request);
     }
