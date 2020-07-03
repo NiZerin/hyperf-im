@@ -45,6 +45,11 @@ class Message
         switch ($message['action']) {
             case ('send_msg_to_user') : {
                 Chat::send($frame, $server, $message);
+                break;
+            }
+            case ('send_smg_to_group') : {
+                Group::send($server, $message);
+                break;
             }
             default : {
                 return;

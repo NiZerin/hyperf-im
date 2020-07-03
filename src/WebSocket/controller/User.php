@@ -35,7 +35,7 @@ class User
     }
 
     /**
-     * @param  \Swoole\Server  $server
+     * @param  \Swoole\WebSocket\Server  $server
      * @param  int  $fd
      */
     public static function setOutline($server, int $fd): void

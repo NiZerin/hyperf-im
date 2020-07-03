@@ -25,4 +25,11 @@ Router::addGroup('/api', function () {
     }, [
         'middleware' => [AuthMiddleware::class]
     ]);
+
+    Router::addGroup('/group', function () {
+        Router::post('/create', 'Src\Home\api\Group@create');
+        Router::post('/join', 'Src\Home\api\Group@join');
+    }, [
+        'middleware' => [AuthMiddleware::class]
+    ]);
 });

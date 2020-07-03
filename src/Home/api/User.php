@@ -14,7 +14,6 @@
 namespace Src\Home\api;
 
 
-
 use App\Controller\AbstractController;
 use App\Model\UserModel;
 use Src\Home\service\Auth;

@@ -50,7 +50,10 @@ class Chat
             ]
         ];
 
-        $server->push($targetUserFd, json_encode($msgData, 256));
+        if ($server->isEstablished((int)$targetUserFd)) {
+            $server->push($targetUserFd, json_encode($msgData, 256));
+        }
+
         $server->push($frame->fd, json_encode($msgData, 256));
 
         self::save($msgData);
