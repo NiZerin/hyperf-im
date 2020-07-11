@@ -52,9 +52,11 @@ class Group
 
         foreach ($userIds as $k => $v) {
             $userFd = redis()->hGet('user_id_to_fd', (string)$v->uid);
+
             if (is_bool($userFd)) {
                 continue;
             }
+
             if ($server->isEstablished((int)$userFd)) {
                 $server->push($userFd, json_encode($msgData, 256));
             }

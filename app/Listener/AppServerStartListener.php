@@ -16,7 +16,7 @@ namespace App\Listener;
 
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Event\Contract\ListenerInterface;
-use Hyperf\Framework\Event\BeforeMainServerStart;
+use Hyperf\Framework\Event\MainWorkerStart;
 
 class AppServerStartListener implements ListenerInterface
 {
@@ -33,7 +33,7 @@ class AppServerStartListener implements ListenerInterface
     public function listen(): array
     {
         return [
-            BeforeMainServerStart::class
+            MainWorkerStart::class
         ];
     }
 
