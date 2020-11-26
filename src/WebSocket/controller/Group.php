@@ -62,4 +62,9 @@ class Group
             }
         }
     }
+
+    public static function save()
+    {
+
+    }
 }

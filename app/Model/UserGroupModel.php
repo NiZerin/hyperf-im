@@ -20,7 +20,7 @@ namespace App\Model;
  */
 class UserGroupModel extends Model
 {
-    protected $table = 'app_user_in_group';
+    protected $table = 'app_group_user';
 
     protected $fillable = ['id', 'uid', 'group_id', 'created_at', 'updated_at', 'deleted_at'];
 }

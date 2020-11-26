@@ -29,7 +29,7 @@ class Group extends AbstractController
     /**
      * @param  GroupCreate  $groupCreate
      */
-    public function create(GroupCreate $groupCreate)
+    public function create(GroupCreate $groupCreate): \Psr\Http\Message\ResponseInterface
     {
         $data = $groupCreate->validated();
         $user = $this->request->getAttribute('user');
@@ -48,7 +48,7 @@ class Group extends AbstractController
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function join(GroupJoin $groupJoin)
+    public function join(GroupJoin $groupJoin): \Psr\Http\Message\ResponseInterface
     {
         $data = $groupJoin->validated();
         $user = $this->request->getAttribute('user');

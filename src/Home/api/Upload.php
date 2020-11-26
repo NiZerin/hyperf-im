@@ -29,7 +29,7 @@ class Upload extends AbstractController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function image()
+    public function image(): \Psr\Http\Message\ResponseInterface
     {
         $file = $this->request->file('image');
 
@@ -43,7 +43,7 @@ class Upload extends AbstractController
     /**
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function file()
+    public function file(): \Psr\Http\Message\ResponseInterface
     {
         $file = $this->request->file('file');
 
@@ -61,7 +61,7 @@ class Upload extends AbstractController
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function saveOss($file, int $size)
+    public function saveOss($file, int $size): \Psr\Http\Message\ResponseInterface
     {
         $fileSize = $file->getSize();
 

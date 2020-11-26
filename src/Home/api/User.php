@@ -36,7 +36,7 @@ class User extends AbstractController
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function reg(UserReg $userReg)
+    public function reg(UserReg $userReg): \Psr\Http\Message\ResponseInterface
     {
         $data = $userReg->validated();
 
@@ -58,7 +58,7 @@ class User extends AbstractController
      *
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function login(UserLogin $userLogin, Auth $auth)
+    public function login(UserLogin $userLogin, Auth $auth): \Psr\Http\Message\ResponseInterface
     {
         $data = $userLogin->validated();
 

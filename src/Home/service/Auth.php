@@ -21,7 +21,7 @@ class Auth
 {
 
     /**
-     * 成 token
+     * 生成 token
      * @param  object  $user
      *
      * @return string
